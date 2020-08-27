@@ -7,6 +7,8 @@ import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.util.HtmlUtils;
 
+import java.security.Principal;
+
 /**
  *
  * STOMP messages can be routed to @Controller classes.
@@ -27,9 +29,10 @@ public class GreetingController {
      * it will be echoed back and re-rendered in the browser DOM on the client side.
      */
     @MessageMapping("/hello")
-    @SendTo("/topic/greetings")
-    public Greeting greeting(HelloMessage message) throws Exception {
-        return new Greeting("Hello, " + HtmlUtils.htmlEscape(message.getName()) + "!");
+    @SendTo("/topic/greetings/1")
+    public Greeting greeting(HelloMessage message, Principal principal) throws Exception {
+
+        return new Greeting(principal.getName() + ": Hello, " + HtmlUtils.htmlEscape(message.getName()) + "!");
     }
 
 }
